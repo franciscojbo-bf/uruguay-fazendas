@@ -1,0 +1,5 @@
+export const TYPEFORM_URL = '#'
+export const AGENDA_FIM = '2026-11-12'
+export const INSTAGRAM_URL = 'https://www.instagram.com/uruguaifazendas/'
+export const INSTAGRAM_HANDLE = '@uruguaifazendas'
+export const BASE_URL = 'https://uruguai.benedinifazendas.com.br'
