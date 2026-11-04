@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { AGENDA_FIM } from '@/lib/config'
-import TypeformButton from './TypeformButton'
+import HotlineButton from './HotlineButton'
 
 function formatDate(iso: string): string {
   const d = new Date(iso + 'T23:59:59')
@@ -50,7 +50,7 @@ export default function AgendaReservada() {
         </div>
 
         <div className="mt-10">
-          <TypeformButton
+          <HotlineButton
             label="Solicitar Acesso"
             utmContent="agenda"
             className="bg-benedini-gold text-benedini-dark px-10 py-4 font-semibold text-lg hover:bg-benedini-gold-light transition min-h-[44px]"

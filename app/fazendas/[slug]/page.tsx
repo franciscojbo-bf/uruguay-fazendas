@@ -1,17 +1,21 @@
 import { getPropriedades, getPropriedade } from '@/lib/sheets'
 import { BASE_URL } from '@/lib/config'
+import { safeJsonLd } from '@/lib/jsonld'
 import { notFound } from 'next/navigation'
-import TypeformButton from '@/components/TypeformButton'
+import HotlineButton from '@/components/HotlineButton'
 
 export const revalidate = 300
+
+type Params = { params: Promise<{ slug: string }> }
 
 export async function generateStaticParams() {
   const props = await getPropriedades()
   return props.map((p) => ({ slug: p.slug }))
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const p = await getPropriedade(params.slug)
+export async function generateMetadata({ params }: Params) {
+  const { slug } = await params
+  const p = await getPropriedade(slug)
   if (!p) return { title: 'Propriedade não encontrada' }
 
   const desc = `${p.area_ha.toLocaleString('pt-BR')} ha em ${p.departamento}, Uruguai. ${p.coneat_medio > 0 ? `Índice CONEAT médio ${p.coneat_medio}.` : ''} USD ${p.preco_por_ha_usd.toLocaleString('pt-BR')}/ha.`
@@ -19,7 +23,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return {
     title: `${p.nome} em ${p.departamento}, Uruguai | Benedini Fazendas`,
     description: desc.slice(0, 155),
-    alternates: { canonical: `/fazendas/${params.slug}` },
+    alternates: { canonical: `/fazendas/${slug}` },
   }
 }
 
@@ -37,13 +41,14 @@ function BreadcrumbJsonLd({ nome, slug }: { nome: string; slug: string }) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(data) }}
     />
   )
 }
 
-export default async function PropriedadePage({ params }: { params: { slug: string } }) {
-  const p = await getPropriedade(params.slug)
+export default async function PropriedadePage({ params }: Params) {
+  const { slug } = await params
+  const p = await getPropriedade(slug)
   if (!p) notFound()
 
   const valorTotalFormatado = (p.valor_total_usd / 1_000_000).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
@@ -204,7 +209,7 @@ export default async function PropriedadePage({ params }: { params: { slug: stri
               Solicite seu acesso e receba análise técnica, jurídica e financeira detalhada.
             </p>
             <div className="mt-6">
-              <TypeformButton
+              <HotlineButton
                 label="Quero Conhecer Esta Propriedade"
                 utmContent={`prop-${p.slug}`}
                 propriedade={p.slug}

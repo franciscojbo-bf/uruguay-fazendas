@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { BASE_URL, INSTAGRAM_URL, INSTAGRAM_HANDLE } from '@/lib/config'
+import { safeJsonLd } from '@/lib/jsonld'
 import AgendaBanner from '@/components/AgendaBanner'
 import UtmCapture from '@/components/UtmCapture'
-import TypeformButton from '@/components/TypeformButton'
+import HotlineButton from '@/components/HotlineButton'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -56,7 +57,7 @@ function JsonLd() {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(data) }}
     />
   )
 }
@@ -108,13 +109,13 @@ function Nav() {
           <a
             href={INSTAGRAM_URL}
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
             aria-label={`Instagram ${INSTAGRAM_HANDLE}`}
             className="hover:text-benedini-gold transition"
           >
             <InstagramIcon />
           </a>
-          <TypeformButton
+          <HotlineButton
             label="Fale Conosco"
             utmContent="menu"
             className="bg-benedini-gold text-benedini-dark px-5 py-2 text-sm font-semibold hover:bg-benedini-gold-light transition"
@@ -144,7 +145,7 @@ function Footer() {
             <a
               href={INSTAGRAM_URL}
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               aria-label={`Instagram ${INSTAGRAM_HANDLE}`}
               className="flex items-center gap-2 hover:text-benedini-gold transition"
             >

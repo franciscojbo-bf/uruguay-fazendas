@@ -1,14 +1,14 @@
 import { ImageResponse } from 'next/og'
 import { getPropriedade } from '@/lib/sheets'
 
-export const runtime = 'edge'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 export const alt = 'Propriedade rural no Uruguai | Benedini Fazendas'
 
-export default async function Image({ params }: { params: { slug: string } }) {
-  const p = await getPropriedade(params.slug)
+export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const p = await getPropriedade(slug)
 
   const nome = p?.nome || 'Propriedade'
   const depto = p?.departamento || 'Uruguai'
@@ -35,7 +35,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
           {nome}
         </div>
         <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 28, marginTop: 12 }}>
-          {depto}, Uruguai
+          {`${depto}, Uruguai`}
         </div>
         <div style={{ display: 'flex', gap: 40, marginTop: 40 }}>
           {area && (

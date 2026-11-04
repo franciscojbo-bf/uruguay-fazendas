@@ -1,7 +1,7 @@
 import { getPropriedades } from '@/lib/sheets'
 import PropertyCard from '@/components/PropertyCard'
 import AgendaReservada from '@/components/AgendaReservada'
-import TypeformButton from '@/components/TypeformButton'
+import HotlineButton from '@/components/HotlineButton'
 
 export const revalidate = 300
 
@@ -62,9 +62,11 @@ function Hero() {
           <a href="/fazendas" className="bg-benedini-gold text-benedini-dark px-8 py-4 font-semibold text-center hover:bg-benedini-gold-light transition">
             Ver fazendas disponíveis
           </a>
-          <a href="#agenda-reservada" className="border border-white/30 text-white px-8 py-4 font-semibold text-center hover:border-benedini-gold hover:text-benedini-gold transition">
-            Falar com um especialista
-          </a>
+          <HotlineButton
+            label="Falar com um especialista"
+            utmContent="hero"
+            className="border border-white/30 text-white px-8 py-4 font-semibold hover:border-benedini-gold hover:text-benedini-gold transition"
+          />
         </div>
 
         <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -362,7 +364,7 @@ function Contato() {
         </p>
 
         <div className="mt-12">
-          <TypeformButton
+          <HotlineButton
             label="Solicitar Acesso"
             utmContent="contato"
             className="bg-benedini-gold text-benedini-dark px-10 py-4 font-semibold text-lg hover:bg-benedini-gold-light transition min-h-[44px]"

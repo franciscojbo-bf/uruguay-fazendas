@@ -7,7 +7,7 @@ const statusStyles: Record<string, string> = {
 }
 
 export default function PropertyCard({ propriedade: p }: { propriedade: Propriedade }) {
-  const fotoUrl = p.fotos[0] || '/placeholder-fazenda.jpg'
+  const fotoUrl = p.fotos[0] || '/uruguai-paisagem.jpg'
 
   return (
     <a href={`/fazendas/${p.slug}`} className="group block bg-white overflow-hidden hover:shadow-lg transition-shadow">

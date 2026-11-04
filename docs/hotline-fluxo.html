@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hotline Uruguai · Fluxo do formulário</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark: #0F2218;
+    --green: #1B3A2D;
+    --gold: #D4A858;
+    --gold-light: #E8C97A;
+    --cream: #FAF8F5;
+    --card: #F5F3EE;
+    --text: #2D2D2D;
+    --muted: #6B7280;
+    --line: #E4DFD4;
+  }
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #d9d6cf;
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 10pt;
+    line-height: 1.45;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .page {
+    width: 210mm;
+    height: 297mm;
+    margin: 10mm auto;
+    background: var(--cream);
+    padding: 18mm 20mm 16mm;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,.15);
+    display: flex;
+    flex-direction: column;
+  }
+  @media print {
+    body { background: none; }
+    .page { margin: 0; box-shadow: none; page-break-after: always; break-after: page; }
+    .page:last-child { page-break-after: auto; break-after: auto; }
+  }
+  @media screen and (max-width: 820px) {
+    .page { width: 100%; height: auto; min-height: 0; margin: 0 0 12px; padding: 24px 16px; overflow: visible; }
+    .phones, .grid2, .grid3, .branches { grid-template-columns: 1fr !important; }
+    .branch-svg { display: none; }
+  }
+
+  h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; margin: 0; }
+  .eyebrow {
+    color: var(--gold);
+    font-size: 7.5pt;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+  }
+  .page-title { font-size: 22pt; color: var(--green); margin-top: 4px; }
+  .lead { color: var(--muted); margin: 6px 0 0; max-width: 150mm; }
+  .footer {
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    font-size: 7.5pt;
+    color: var(--muted);
+  }
+
+  /* ---------- Capa ---------- */
+  .cover { background: var(--dark); color: #fff; padding: 22mm 22mm 18mm; }
+  .cover .logo { width: 62mm; }
+  .cover h1 { font-size: 38pt; line-height: 1.1; margin-top: 46mm; }
+  .cover h1 em { color: var(--gold); font-style: italic; font-weight: 400; }
+  .cover .sub { color: rgba(255,255,255,.7); font-size: 13pt; margin-top: 10px; max-width: 140mm; }
+  .cover .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 22mm; border-top: 1px solid rgba(255,255,255,.15); }
+  .cover .stat { padding: 14px 12px 0 0; }
+  .cover .stat b { display: block; font-family: 'Playfair Display', Georgia, serif; font-size: 22pt; color: var(--gold); font-weight: 600; }
+  .cover .stat span { font-size: 8.5pt; color: rgba(255,255,255,.6); }
+  .cover .meta { margin-top: auto; font-size: 8.5pt; color: rgba(255,255,255,.5); display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,.15); padding-top: 10px; }
+  .cover .meta b { color: rgba(255,255,255,.85); font-weight: 500; }
+
+  /* ---------- Jornada ---------- */
+  .journey { margin-top: 10mm; position: relative; }
+  .step { display: grid; grid-template-columns: 11mm 1fr; gap: 0 6mm; position: relative; padding-bottom: 6mm; }
+  .step:not(:last-child)::before {
+    content: ''; position: absolute; left: 5.5mm; top: 11mm; bottom: 0; width: 1px; background: var(--gold);
+  }
+  .dot {
+    width: 11mm; height: 11mm; border-radius: 50%;
+    background: var(--green); color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 12pt;
+  }
+  .step.highlight .dot { background: var(--gold); color: var(--dark); }
+  .step h3 { font-size: 12.5pt; color: var(--green); margin-top: 1.5mm; }
+  .step p { margin: 3px 0 0; color: var(--muted); font-size: 9pt; }
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+  .tag { background: #fff; border: 1px solid var(--line); font-size: 8pt; padding: 3px 8px; color: var(--text); }
+  .tag.gold { background: rgba(212,168,88,.14); border-color: rgba(212,168,88,.5); color: #7a5a1c; }
+  .tag.green { background: var(--green); border-color: var(--green); color: #fff; }
+  .callout {
+    background: var(--green); color: #fff; padding: 12px 16px; margin-top: 2mm;
+    display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; font-size: 9pt;
+  }
+  .callout b { color: var(--gold); }
+  .callout .ico { color: var(--gold); font-size: 14pt; line-height: 1; }
+
+  /* ---------- Fluxo de perguntas ---------- */
+  .flow { margin-top: 6mm; display: flex; flex-direction: column; align-items: center; }
+  .node {
+    background: #fff; border: 1px solid var(--line); border-left: 3px solid var(--gold);
+    padding: 9px 12px; width: 100%;
+  }
+  .node .n { font-size: 7.5pt; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+  .node .q { font-family: 'Playfair Display', Georgia, serif; font-size: 11pt; color: var(--green); margin-top: 2px; line-height: 1.3; }
+  .node .t { font-size: 7.5pt; color: var(--muted); margin-top: 3px; }
+  .node.start { border-left-color: var(--green); background: var(--green); }
+  .node.start .q { color: #fff; }
+  .node.start .n { color: var(--gold); }
+  .node.start .t { color: rgba(255,255,255,.6); }
+  .node.end { background: var(--dark); border-color: var(--dark); border-left-color: var(--gold); }
+  .node.end .q { color: #fff; }
+  .node.end .t { color: rgba(255,255,255,.6); }
+  .node.contact { border-left-color: var(--green); background: var(--card); }
+  .narrow { width: 118mm; }
+  .arrow { width: 1px; height: 5mm; background: var(--gold); position: relative; }
+  .arrow::after {
+    content: ''; position: absolute; bottom: -1px; left: -3px;
+    border-left: 3.5px solid transparent; border-right: 3.5px solid transparent; border-top: 5px solid var(--gold);
+  }
+  .branch-svg { width: 100%; height: 10mm; display: block; }
+  .branches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; width: 100%; }
+  .branch .who {
+    font-size: 8pt; font-weight: 600; color: var(--green); text-align: center;
+    background: rgba(212,168,88,.18); padding: 4px 6px; margin-bottom: 3mm;
+  }
+  .branch { display: flex; flex-direction: column; }
+  .branch .node { flex: 1; }
+  .legend { display: flex; gap: 14px; justify-content: center; margin-top: 4mm; margin-bottom: 3mm; font-size: 8pt; color: var(--muted); }
+  .legend i { display: inline-block; width: 9px; height: 9px; margin-right: 5px; vertical-align: -1px; }
+
+  /* ---------- Perguntas detalhadas ---------- */
+  .qlist { margin-top: 5mm; display: flex; flex-direction: column; gap: 3mm; }
+  .qcard { background: #fff; border: 1px solid var(--line); padding: 8px 13px; break-inside: avoid; }
+  .qhead { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .qnum { font-size: 7.5pt; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+  .badges { display: flex; gap: 5px; }
+  .badge { font-size: 7pt; font-weight: 600; padding: 2px 7px; text-transform: uppercase; letter-spacing: .06em; }
+  .badge.single { background: var(--green); color: #fff; }
+  .badge.multi { background: var(--gold); color: var(--dark); }
+  .badge.who { background: var(--card); color: var(--muted); border: 1px solid var(--line); }
+  .qtext { font-family: 'Playfair Display', Georgia, serif; font-size: 11.5pt; color: var(--green); margin-top: 4px; line-height: 1.3; }
+  .qhint { font-size: 8pt; color: var(--muted); margin-top: 2px; }
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 10px; margin-top: 5px; }
+  .opts.c3 { grid-template-columns: repeat(3, 1fr); }
+  .opts.c4 { grid-template-columns: repeat(4, 1fr); }
+  .opts.c5 { grid-template-columns: repeat(5, auto); justify-content: space-between; }
+  .opt { font-size: 8.8pt; display: flex; gap: 7px; align-items: baseline; }
+  .opt .k { font-weight: 600; color: var(--gold); width: 10px; flex-shrink: 0; }
+  .col { font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 7.5pt; color: var(--muted); }
+  .variant { margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--line); font-size: 8.5pt; }
+  .variant b { color: var(--green); }
+
+  /* ---------- Telas (mockups) ---------- */
+  .phones { display: grid; grid-template-columns: 1fr 1fr; gap: 7mm 10mm; margin-top: 7mm; }
+  .phone-wrap .cap { font-size: 8pt; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
+  .phone-wrap .cap span { color: var(--muted); font-weight: 400; letter-spacing: 0; text-transform: none; }
+  .phone {
+    border: 2.2mm solid #1b1b1b; border-radius: 6mm; height: 97mm; overflow: hidden;
+    background: var(--green); color: #fff; display: flex; flex-direction: column;
+    padding: 7mm 6mm 6mm; position: relative;
+  }
+  .phone.light { background: var(--cream); color: var(--text); }
+  .phone .bar { height: 3px; background: rgba(255,255,255,.15); border-radius: 2px; margin-bottom: 6mm; }
+  .phone .bar i { display: block; height: 100%; background: var(--gold); border-radius: 2px; }
+  .phone.light .bar { background: var(--line); }
+  .phone .k { color: var(--gold); font-size: 6.5pt; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
+  .phone h3 { font-size: 14pt; line-height: 1.2; margin-top: 3mm; }
+  .phone.light h3 { color: var(--green); }
+  .phone p { font-size: 8pt; color: rgba(255,255,255,.75); margin: 3mm 0 0; }
+  .phone.light p { color: var(--muted); }
+  .phone .btn {
+    margin-top: auto; background: var(--gold); color: var(--dark); text-align: center;
+    font-weight: 600; font-size: 8.5pt; padding: 8px;
+  }
+  .phone .btn.ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.35); margin-top: 6px; }
+  .phone .btn.ghost.later { opacity: .55; border-style: dashed; }
+  .phone .choice {
+    border: 1px solid rgba(255,255,255,.25); padding: 6px 8px; font-size: 8pt; margin-top: 5px;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .phone .choice::before { content: ''; width: 8px; height: 8px; border: 1px solid rgba(255,255,255,.6); border-radius: 50%; flex-shrink: 0; }
+  .phone .choice.sel { border-color: var(--gold); background: rgba(212,168,88,.15); }
+  .phone .choice.sel::before { background: var(--gold); border-color: var(--gold); }
+  .phone .field { margin-top: 4mm; }
+  .phone .field label { font-size: 7pt; color: var(--muted); display: block; }
+  .phone .field div { border-bottom: 1px solid var(--green); padding: 4px 0; font-size: 8.5pt; color: #9aa0a6; }
+  .phone .field.filled div { color: var(--text); }
+  .phone .back { position: absolute; top: 3.2mm; left: 6mm; font-size: 7pt; color: rgba(255,255,255,.5); }
+  .phone.light .back { color: var(--muted); }
+  .note { font-size: 7.5pt; color: var(--muted); margin-top: 5px; }
+  .pill-sug { display: inline-block; background: rgba(212,168,88,.18); color: #7a5a1c; font-size: 7pt; font-weight: 600; padding: 1px 6px; margin-left: 4px; text-transform: uppercase; letter-spacing: .05em; }
+
+  /* ---------- Tabelas ---------- */
+  table { width: 100%; border-collapse: collapse; margin-top: 4mm; font-size: 8.6pt; background: #fff; }
+  th { text-align: left; font-size: 7.2pt; text-transform: uppercase; letter-spacing: .08em; color: var(--green); padding: 7px 8px; border-bottom: 2px solid rgba(27,58,45,.2); background: var(--card); }
+  td { padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  td.c { text-align: center; }
+  .ok { color: #1f7a4d; font-weight: 600; }
+  .no { color: var(--muted); }
+  h2.sec { font-size: 13pt; color: var(--green); margin-top: 8mm; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+  .todo { list-style: none; padding: 0; margin: 4mm 0 0; }
+  .todo li { display: grid; grid-template-columns: 5mm 1fr auto; gap: 8px; align-items: baseline; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: 9pt; }
+  .todo li::before { content: ''; width: 3.2mm; height: 3.2mm; border: 1.3px solid var(--green); display: inline-block; transform: translateY(1px); }
+  .todo .who { font-size: 7.5pt; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- ======================= 1. CAPA ======================= -->
+<section class="page cover">
+  <img class="logo" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgaWQ9IkNhbWFkYV8yIiBkYXRhLW5hbWU9IkNhbWFkYSAyIiB2aWV3Qm94PSIwIDAgNDQ1LjgyIDE5MS4zOCIgd2lkdGg9IjQ0NS44MjAwMDczMjQyMTg3NSIgaGVpZ2h0PSIxOTEuMzgwMDA0ODgyODEyNSI+PGRlZnM+PHN0eWxlPiAgICAgIC5jbHMtMSwgLmNscy0yLCAuY2xzLTMgeyAgICAgICAgZmlsbDogI2ZmZjsgICAgICB9ICAgICAgLmNscy0yIHsgICAgICAgIGZpbGwtcnVsZTogZXZlbm9kZDsgICAgICB9ICAgICAgLmNscy00IHsgICAgICAgIGNsaXAtcGF0aDogdXJsKCNjbGlwcGF0aC0xKTsgICAgICB9ICAgICAgLmNscy0zIHsgICAgICAgIGNsaXAtcnVsZTogZXZlbm9kZDsgICAgICB9ICAgICAgLmNscy01IHsgICAgICAgIGNsaXAtcGF0aDogdXJsKCNjbGlwcGF0aC0yKTsgICAgICB9ICAgICAgLmNscy02IHsgICAgICAgIGNsaXAtcGF0aDogdXJsKCNjbGlwcGF0aCk7ICAgICAgfSAgICA8L3N0eWxlPjxjbGlwUGF0aCBpZD0iY2xpcHBhdGgiPjxwb2x5Z29uIGNsYXNzPSJjbHMtMyIgcG9pbnRzPSIzMC4xIDE2MS43NCA5NS40NyAxMTguNTIgOTUuNDcgMTE4LjU0IDk1LjQ3IDEzMS4xMiAzMC4xIDE3NC4zNSAzMC4xIDE2MS43NCIvPjwvY2xpcFBhdGg+PGNsaXBQYXRoIGlkPSJjbGlwcGF0aC0xIj48cG9seWdvbiBjbGFzcz0iY2xzLTMiIHBvaW50cz0iMzAuMSAxNzguNzcgOTUuNDcgMTM1LjU1IDk1LjQ3IDEzNS41NyA5NS40NyAxNDguMTUgMzAuMSAxOTEuMzggMzAuMSAxNzguNzciLz48L2NsaXBQYXRoPjxjbGlwUGF0aCBpZD0iY2xpcHBhdGgtMiI+PHBhdGggY2xhc3M9ImNscy0zIiBkPSJNMCwxMi42MVYwbDc5LjA1LDUyLjQyLTkuNTUsNi4yOEwwLDEyLjYxWk0wLDI5LjY1di0xMi42MWw2Ni4xNSw0My44Ni05LjU1LDYuMjhMMCwyOS42NVpNMCw0Ni43di0xMi42MWw1My4yNCwzNS4zLTkuNTUsNi4yOEwwLDQ2LjdaTTQzLjk1LDk3LjA4bDMuMzEtMi4xOS0zLjQyLTIuMjUtMy4zMSwyLjE4LDMuNDEsMi4yNlpNMjcuNzMsMTIwLjQybDI4Ljk3LDE5LjIxLTkuNTQsNi4yOC0yOC45MS0xOS4xN3YtMTIuNjZsMy4zMi0yLjE5LTMuMzItMi4ydi0xMi43OGwzLjIyLTIuMTItMy4yMi0yLjE0di0xMi42MWwxMi43Niw4LjQ2LDMuMjgtMi4xNkwuMDIsNjMuNzZ2LTEyLjYxbDQzLjgxLDI4Ljg5LDM1LjIxLTIzLjJ2LjAyczAsMTIuNTgsMCwxMi41OGwtMjUuNjUsMTYuOSwzLjQsMi4yNCwyMi4yNS0xNC43MXYuMDJzMCwxMi41OCwwLDEyLjU4bC0xMi43MSw4LjQsMjkuMTMsMTkuMjEtOS41NCw2LjI4LTI5LjEyLTE5LjE5LTMuMzQsMi4yMSwyOS4wMiwxOS4yNC05LjU0LDYuMjgtMjktMTkuMjMtMy4zNSwyLjIxLDI4Ljk5LDE5LjIyLTkuNTQsNi4yOC0yOC45Ny0xOS4yMS0zLjM1LDIuMjJaTTI3LjY1LDEwMy4zMWwzLjQ0LDIuMjgsMy4zNS0yLjIxLTMuNDMtMi4yOC0zLjM1LDIuMjFaIi8+PC9jbGlwUGF0aD48L2RlZnM+PGcgaWQ9IkNhbWFkYV8xLTIiIGRhdGEtbmFtZT0iQ2FtYWRhIDEiPjxnPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIzMC4xIDE2MS43NCA5NS40NyAxMTguNTIgOTUuNDcgMTE4LjU0IDk1LjQ3IDEzMS4xMiAzMC4xIDE3NC4zNSAzMC4xIDE2MS43NCIvPjxnIGNsYXNzPSJjbHMtNiI+PHJlY3QgY2xhc3M9ImNscy0xIiB4PSIzMC4xIiB5PSIxMTguNTIiIHdpZHRoPSI2NS4zNyIgaGVpZ2h0PSI1NS44MyIvPjwvZz48L2c+PGc+PHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjMwLjEgMTc4Ljc3IDk1LjQ3IDEzNS41NSA5NS40NyAxMzUuNTcgOTUuNDcgMTQ4LjE1IDMwLjEgMTkxLjM4IDMwLjEgMTc4Ljc3Ii8+PGcgY2xhc3M9ImNscy00Ij48cmVjdCBjbGFzcz0iY2xzLTEiIHg9IjMwLjEiIHk9IjEzNS41NSIgd2lkdGg9IjY1LjM3IiBoZWlnaHQ9IjU1LjgzIi8+PC9nPjwvZz48Zz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0wLDEyLjYxVjBsNzkuMDUsNTIuNDItOS41NSw2LjI4TDAsMTIuNjFaTTAsMjkuNjV2LTEyLjYxbDY2LjE1LDQzLjg2LTkuNTUsNi4yOEwwLDI5LjY1Wk0wLDQ2Ljd2LTEyLjYxbDUzLjI0LDM1LjMtOS41NSw2LjI4TDAsNDYuN1pNNDMuOTUsOTcuMDhsMy4zMS0yLjE5LTMuNDItMi4yNS0zLjMxLDIuMTgsMy40MSwyLjI2Wk0yNy43MywxMjAuNDJsMjguOTcsMTkuMjEtOS41NCw2LjI4LTI4LjkxLTE5LjE3di0xMi42NmwzLjMyLTIuMTktMy4zMi0yLjJ2LTEyLjc4bDMuMjItMi4xMi0zLjIyLTIuMTR2LTEyLjYxbDEyLjc2LDguNDYsMy4yOC0yLjE2TC4wMiw2My43NnYtMTIuNjFsNDMuODEsMjguODksMzUuMjEtMjMuMnYuMDJzMCwxMi41OCwwLDEyLjU4bC0yNS42NSwxNi45LDMuNCwyLjI0LDIyLjI1LTE0Ljcxdi4wMnMwLDEyLjU4LDAsMTIuNThsLTEyLjcxLDguNCwyOS4xMywxOS4yMS05LjU0LDYuMjgtMjkuMTItMTkuMTktMy4zNCwyLjIxLDI5LjAyLDE5LjI0LTkuNTQsNi4yOC0yOS0xOS4yMy0zLjM1LDIuMjEsMjguOTksMTkuMjItOS41NCw2LjI4LTI4Ljk3LTE5LjIxLTMuMzUsMi4yMlpNMjcuNjUsMTAzLjMxbDMuNDQsMi4yOCwzLjM1LTIuMjEtMy40My0yLjI4LTMuMzUsMi4yMVoiLz48ZyBjbGFzcz0iY2xzLTUiPjxyZWN0IGNsYXNzPSJjbHMtMSIgd2lkdGg9Ijk1LjQ3IiBoZWlnaHQ9IjE0NS45MSIvPjwvZz48L2c+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNDM5LjY2LDk4Ljk5di00OS4xaDYuMTZ2NDkuMWgtNi4xNlpNMzc0LjY2LDk4Ljk5di00OS4xaDYuMTZ2NDkuMWgtNi4xNlpNMzQ0LDUwLjE3YzcuNjgsMCwxMy44OCwyLjI2LDE4LjU3LDYuODEsNC43LDQuNTQsNy4wNSwxMC40NSw3LjA1LDE3Ljc0cy0yLjMxLDEzLjIzLTYuOTMsMTcuNjVjLTQuNjQsNC40Mi0xMC44Niw2LjYzLTE4LjY5LDYuNjNoLTIwLjk0di00OC44M2gyMC45NFpNMzQ0LDU1Ljc4aC0xNC44N3YzNy42aDE0Ljg3YzYuMDEsMCwxMC43NS0xLjY5LDE0LjE5LTUuMDYsMy40Ni0zLjM4LDUuMTgtNy45NCw1LjE4LTEzLjY5cy0xLjc1LTEwLjIyLTUuMjctMTMuNjZjLTMuNS0zLjQ2LTguMjEtNS4xOC0xNC4xLTUuMThaTTI3OS4zMyw5OC45OXYtNDguODNoMzUuNjZ2NS42MmgtMjkuNTl2MTQuMzFoMTkuNTd2NS42MmgtMTkuNTd2MTcuNjdoMzQuM2wtNi4wNSw1LjYyaC0zNC4zMlpNMjI5LjU0LDk4Ljk5di00OC44M2wzNC44OCwzNC4wNXYtMzQuMDVoNi4wN3Y0OC44M2wtMzQuODgtMzQuMDV2MzQuMDVoLTYuMDdaTTE4NS44Miw5OC45OXYtNDguODNoMzUuNzJsLTQuMDcsNS42MmgtMjUuNTh2MTQuMzFoMTkuNTd2NS42MmgtMTkuNTd2MTcuNjdoMzQuMzN2NS42MmgtNDAuNFpNMTMyLjQsOTguOTl2LTQ4LjgzaDI4Ljg4YzQuOCwwLDguNDQsMS4wMywxMC45LDMuMDgsMi40NiwyLjA1LDMuNyw1LjA3LDMuNyw5LjA5LDAsMS45NS0uMzgsMy42OC0xLjE1LDUuMjItLjc3LDEuNTQtMS44NiwyLjc4LTMuMjgsMy43MSwyLjYsMS41MSw0LjU2LDMuMzUsNS44Nyw1LjUzLDEuMzMsMi4xOSwxLjk5LDQuNjgsMS45OSw3LjUyLDAsNC41MS0xLjQ4LDguMDgtNC40NCwxMC43Mi0yLjk3LDIuNjQtNi45OSwzLjk2LTEyLjA2LDMuOTZoLTMwLjQyWk0xMzguNDcsOTMuMzhoMjUuNTVjMi43OCwwLDQuOTctLjgyLDYuNTctMi40NSwxLjYtMS42NSwyLjQtMy44OCwyLjQtNi43cy0uOC01LjAzLTIuNC02LjY3Yy0xLjYtMS42NS0zLjc5LTIuNDgtNi41Ny0yLjQ4aC0yNS41NXYxOC4zWk0xMzguNDcsNjkuNDZoMjMuMzRjMi41NywwLDQuNTMtLjU5LDUuODctMS43NSwxLjM2LTEuMTYsMi4wNC0yLjg0LDIuMDQtNS4wM3MtLjY1LTQuMDItMS45Ni01LjE4Yy0xLjMxLTEuMTUtMy4yOS0xLjcyLTUuOTUtMS43MmgtMjMuMzR2MTMuNjhaIi8+PHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjM4OS43OCA5OC43MiAzODkuNzggNDkuODkgNDI0LjY2IDgzLjk0IDQyNC42NiA0OS44OSA0MzAuNzMgNDkuODkgNDMwLjczIDk4LjcyIDM5NS44NSA2NC42NyAzOTUuODUgOTguNzIgMzg5Ljc4IDk4LjcyIi8+PHBvbHlnb24gY2xhc3M9ImNscy0xIiBwb2ludHM9IjEzNi4wOCAxNDIuNjMgMTMyLjczIDE0Mi42MyAxMzIuNzMgMTE1LjI3IDE0OS4wNyAxMTUuMjcgMTQ5LjA3IDExOC4yOCAxMzYuMDggMTE4LjI4IDEzNi4wOCAxMjcuMTIgMTQ3LjU5IDEyNy4xMiAxNDcuNTkgMTMwLjE0IDEzNi4wOCAxMzAuMTQgMTM2LjA4IDE0Mi42MyIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTE1OS43LDExOS41Yy0xLjIzLDMuNDEtMi40LDYuNTEtMy41MSw5LjI5bC0xLjA1LDIuNmg5LjE1bC0xLjA1LTIuNjFjLTEuMTItMi44My0yLjI3LTUuOTMtMy40NS05LjI5aC0uMDhaTTE0Ny4xNSwxNDIuNjNsMTEuMTItMjcuMzZoMi44OWwxMS4xNiwyNy4zNmgtMy42MmwtMy4yMS04LjIxaC0xMS41M2wtMy4yMyw4LjIxaC0zLjU4WiIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMSIgcG9pbnRzPSIxOTMuNDIgMTE1LjI3IDE5My40MiAxMTcuMzYgMTc3LjU1IDEzOS42MSAxOTMuNjEgMTM5LjYxIDE5My42MSAxNDIuNjMgMTczLjE3IDE0Mi42MyAxNzMuMTcgMTQwLjUzIDE4OS4wOCAxMTguMjggMTczLjU0IDExOC4yOCAxNzMuNTQgMTE1LjI3IDE5My40MiAxMTUuMjciLz48cG9seWdvbiBjbGFzcz0iY2xzLTEiIHBvaW50cz0iMjAwLjU3IDEzOS42MSAyMTQuNiAxMzkuNjEgMjE0LjYgMTQyLjYzIDE5Ny4yMiAxNDIuNjMgMTk3LjIyIDExNS4yNyAyMTMuODQgMTE1LjI3IDIxMy44NCAxMTguMjggMjAwLjU3IDExOC4yOCAyMDAuNTcgMTI3LjEyIDIxMi4zNyAxMjcuMTIgMjEyLjM3IDEzMC4xNCAyMDAuNTcgMTMwLjE0IDIwMC41NyAxMzkuNjEiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0yMzIuNDUsMTMwLjUyYzEuNjgsMi40MiwzLjMzLDQuODksNC45Nyw3LjQ0aC4xMmMtLjE3LTIuNjUtLjI3LTUuMzctLjI3LTguMTN2LTE0LjU2aDMuMzd2MjcuMzZoLTMuMzVsLTEwLjcyLTE1LjI1Yy0xLjg1LTIuNjYtMy41MS01LjE0LTQuOTYtNy40NGgtLjEzYy4xNywyLjQ5LjI3LDUuNC4yNyw4LjczdjEzLjk2aC0zLjM1di0yNy4zNmgzLjMxbDEwLjc0LDE1LjI1WiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTI2NC41MSwxMjguODJjMC0yLjYzLS41OC00Ljc1LTEuNzQtNi4zOS0xLjE2LTEuNjMtMi44Mi0yLjc5LTQuOTktMy40Ny0uODMtLjI3LTEuNzUtLjQ0LTIuNzctLjU0LTEuMDMtLjA5LTIuMTgtLjE0LTMuNDYtLjE0aC0yLjU1djIxLjMyaDIuNTVjMS4yOCwwLDIuNDMtLjA1LDMuNDYtLjE0LDEuMDItLjEsMS45NC0uMjgsMi43Ny0uNTQsMi4xNi0uNjgsMy44My0xLjg3LDQuOTktMy41NywxLjE2LTEuNywxLjc0LTMuODgsMS43NC02LjU0TTI2Ny44MiwxMjguODJjMCwxLjYtLjIsMy4xLS41OSw0LjUtLjM5LDEuNC0uOTksMi42Ny0xLjc5LDMuNzktLjgsMS4xMi0xLjc5LDIuMDktMi45OSwyLjkxLTEuMTkuODItMi41OCwxLjQ1LTQuMTgsMS45LS45MS4yNi0xLjkxLjQ0LTIuOTcuNTQtMS4wNi4xLTIuMjEuMTUtMy40Ni4xNWgtNi4xOXYtMjcuMzZoNi4yNmMxLjI0LDAsMi40LjA1LDMuNDYuMTUsMS4wNi4xLDIuMDUuMjgsMi45Ni41NCwxLjYuNDUsMi45OSwxLjA4LDQuMTgsMS44OCwxLjE5LjgsMi4xOSwxLjc1LDIuOTcsMi44NS43OCwxLjEsMS4zNywyLjMzLDEuNzYsMy43LjM4LDEuMzguNTgsMi44NS41OCw0LjQzWiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTI4MS42NSwxMTkuNWMtMS4yMywzLjQxLTIuNCw2LjUxLTMuNTEsOS4yOWwtMS4wNSwyLjZoOS4xNWwtMS4wNS0yLjYxYy0xLjEyLTIuODMtMi4yNy01LjkzLTMuNDUtOS4yOWgtLjA4Wk0yNjkuMSwxNDIuNjNsMTEuMTItMjcuMzZoMi44OWwxMS4xNiwyNy4zNmgtMy42MmwtMy4yMS04LjIxaC0xMS41M2wtMy4yMyw4LjIxaC0zLjU4WiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTI5OS4yMywxMjIuNDhjMCwuOC4xNiwxLjQ3LjQ5LDEuOTkuMzMuNTMuNzYuOTYsMS4zMSwxLjMxLjU1LjM0LDEuMTkuNjIsMS45MS44NC43My4yMiwxLjQ5LjQyLDIuMjcuNjEsMS4wNi4yNiwyLjEuNTQsMy4xMy44NiwxLjAzLjMxLDEuOTMuNzUsMi43NCwxLjMuOC41NSwxLjQ1LDEuMjcsMS45NSwyLjE2LjUuODkuNzQsMi4wMi43NCwzLjQycy0uMjcsMi42NC0uOCwzLjY3Yy0uNTQsMS4wMy0xLjI4LDEuODctMi4yMywyLjUzLS45NS42Ni0yLjA3LDEuMTUtMy4zNywxLjQ3LTEuMy4zMi0yLjcyLjQ4LTQuMjUuNDgtLjcxLDAtMS40NC0uMDQtMi4xOC0uMTMtLjc1LS4wOS0xLjQ1LS4yMS0yLjEzLS4zNi0uNjgtLjE1LTEuMjgtLjMyLTEuODMtLjUxLS41NC0uMTktLjk4LS4zOC0xLjI5LS41N3YtMy4wNGMuNDkuMjQsMS4wNC40NiwxLjY1LjY2LjYxLjIsMS4yNS4zOCwxLjkxLjUyLjY2LjE0LDEuMzEuMjUsMS45OC4zNC42Ny4wOCwxLjMuMTIsMS44OS4xMi45NSwwLDEuODYtLjA4LDIuNzMtLjI0Ljg3LS4xNywxLjYzLS40NCwyLjI4LS44Mi42Ni0uMzgsMS4xNy0uOTEsMS41Ni0xLjU2LjM4LS42Ni41Ny0xLjQ5LjU3LTIuNDksMC0uODItLjE3LTEuNDktLjUtMi4wMi0uMzMtLjUzLS43OC0uOTctMS4zMy0xLjMyLS41Ni0uMzUtMS4yLS42My0xLjkzLS44NS0uNzMtLjIyLTEuNDktLjQyLTIuMy0uNjEtMS4wNy0uMjUtMi4xLS41Mi0zLjExLS44My0xLjAyLS4zMS0xLjkyLS43My0yLjcyLTEuMjgtLjgtLjU0LTEuNDQtMS4yNS0xLjkyLTIuMTEtLjQ4LS44Ni0uNzMtMS45Ni0uNzMtMy4zcy4yNS0yLjU5Ljc2LTMuNTljLjUxLTEuMDEsMS4yLTEuODQsMi4wNy0yLjQ5Ljg3LS42NSwxLjg3LTEuMTQsMy0xLjQ1LDEuMTMtLjMxLDIuMzQtLjQ3LDMuNjItLjQ3LDEuNDYsMCwyLjgxLjE0LDQuMDguNDIsMS4yNi4yOCwyLjQyLjY1LDMuNDcsMS4xdjMuMDljLTEuMTMtLjQ3LTIuMy0uODctMy41MS0xLjE3LTEuMjEtLjMtMi41LS40NS0zLjg4LS40Ny0xLjAzLDAtMS45My4xMS0yLjcuMzQtLjc2LjIyLTEuNC41NC0xLjkuOTYtLjUuNDEtLjg4LjkxLTEuMTIsMS41MS0uMjQuNTktLjM3LDEuMjUtLjM3LDEuOTgiLz48L2c+PC9zdmc+" alt="Benedini Fazendas">
+  <h1>Hotline <em>Uruguai</em></h1>
+  <p class="sub">Como vai funcionar o novo formulário de qualificação do site, que substitui o Typeform.</p>
+
+  <div class="stats">
+    <div class="stat"><b>8</b><span>telas no total</span></div>
+    <div class="stat"><b>&lt; 1 min</b><span>para responder</span></div>
+    <div class="stat"><b>3</b><span>perfis de cliente</span></div>
+    <div class="stat"><b>R$ 0</b><span>de mensalidade</span></div>
+  </div>
+
+  <div class="meta">
+    <span><b>uruguai.benedinifazendas.com.br/hotline</b></span>
+    <span>Proposta · 3 de novembro de 2026</span>
+  </div>
+</section>
+
+<!-- ======================= 2. FLUXO DE ACESSO ======================= -->
+<section class="page">
+  <div class="eyebrow">01 · Fluxo de acesso</div>
+  <h1 class="page-title">Do anúncio ao atendimento</h1>
+  <p class="lead">O caminho completo do cliente, desde o clique até o contato com o especialista. Todos os botões de contato do site passam a levar para a mesma página.</p>
+
+  <div class="journey">
+    <div class="step">
+      <div class="dot">1</div>
+      <div>
+        <h3>Origem do visitante</h3>
+        <p>Anúncio, Instagram, link enviado pelo comercial ou acesso direto. A origem da campanha (UTMs) é guardada automaticamente.</p>
+        <div class="tags"><span class="tag">Anúncios</span><span class="tag">Instagram @uruguaifazendas</span><span class="tag">Link direto</span></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="dot">2</div>
+      <div>
+        <h3>Botão no site</h3>
+        <p>Qualquer botão de contato leva para <b>/hotline</b>. O site registra qual botão foi clicado e, se for o caso, de qual fazenda o cliente veio.</p>
+        <div class="tags">
+          <span class="tag gold">Solicitar Acesso · faixa do topo</span>
+          <span class="tag gold">Solicitar Acesso · seção Agenda</span>
+          <span class="tag gold">Fale Conosco · menu</span>
+          <span class="tag gold">Quero Conhecer Esta Propriedade · página da fazenda</span>
+        </div>
+      </div>
+    </div>
+    <div class="step highlight">
+      <div class="dot">3</div>
+      <div>
+        <h3>Formulário /hotline</h3>
+        <p>Uma pergunta por tela, no padrão do Typeform. Escolha única avança sozinha; nas de múltipla escolha o cliente toca em Continuar.</p>
+        <div class="tags"><span class="tag green">Abertura</span><span class="tag green">5 perguntas</span><span class="tag green">Dados de contato</span></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="dot">4</div>
+      <div>
+        <h3>Gravação na planilha</h3>
+        <p>O servidor do site grava as respostas numa planilha Google <b>privada</b>, aba LEADS, uma linha por cliente. A senha de acesso à planilha nunca fica exposta no navegador.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="dot">5</div>
+      <div>
+        <h3>Tela de obrigado</h3>
+        <p>Agradece pelo nome, libera o download do E-Book Uruguai e, quando estiver pronto, o agendamento direto no Calendly.</p>
+        <div class="tags"><span class="tag">Baixar o E-Book Uruguai</span><span class="tag">Agendar conversa · Calendly (em breve)</span></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="dot">6</div>
+      <div>
+        <h3>Atendimento</h3>
+        <p>O comercial acompanha os leads na planilha, já qualificados por perfil, valor e prazo, e entra em contato pelo WhatsApp.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="ico">●</div>
+    <div><b>Registrado sem perguntar ao cliente:</b> data e hora, botão clicado, fazenda de origem e campanha (utm_source, utm_medium, utm_campaign, utm_content, utm_term).</div>
+  </div>
+
+  <div class="footer"><span>Benedini Fazendas · Hotline Uruguai</span><span>2</span></div>
+</section>
+
+<!-- ======================= 3. FLUXO DE PERGUNTAS ======================= -->
+<section class="page">
+  <div class="eyebrow">02 · Fluxo de perguntas</div>
+  <h1 class="page-title">Uma pergunta muda conforme o perfil</h1>
+  <p class="lead">A primeira resposta define a segunda pergunta. Depois disso, todos os perfis seguem pelo mesmo caminho.</p>
+
+  <div class="flow">
+    <div class="node start narrow">
+      <div class="n">Tela de abertura</div>
+      <div class="q">Agenda Reservada Uruguai</div>
+      <div class="t">Botão Começar</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="node narrow">
+      <div class="n">Pergunta 1 · todos</div>
+      <div class="q">Para começar, qual destas opções descreve melhor você?</div>
+      <div class="t">Escolha única · 3 opções</div>
+    </div>
+
+    <svg class="branch-svg" viewBox="0 0 300 30" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M150 0 V10 M50 10 H250 M50 10 V30 M150 10 V30 M250 10 V30" stroke="#D4A858" stroke-width="1" fill="none" vector-effect="non-scaling-stroke"/>
+    </svg>
+
+    <div class="branches">
+      <div class="branch">
+        <div class="who">Sou produtor rural</div>
+        <div class="node">
+          <div class="n">Pergunta 2</div>
+          <div class="q">Quando você pretende investir?</div>
+          <div class="t">Escolha única · 4 opções</div>
+        </div>
+      </div>
+      <div class="branch">
+        <div class="who">Sou empresário ou investidor</div>
+        <div class="node">
+          <div class="n">Pergunta 2</div>
+          <div class="q">O que mais pesa para você ao considerar terra fora do Brasil?</div>
+          <div class="t">Até 2 opções · Continuar</div>
+        </div>
+      </div>
+      <div class="branch">
+        <div class="who">Família ou family office</div>
+        <div class="node">
+          <div class="n">Pergunta 2</div>
+          <div class="q">O que mais pesa para a família ao considerar terra fora do Brasil?</div>
+          <div class="t">Até 2 opções · Continuar</div>
+        </div>
+      </div>
+    </div>
+
+    <svg class="branch-svg" viewBox="0 0 300 30" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M50 0 V18 M150 0 V18 M250 0 V18 M50 18 H250 M150 18 V30" stroke="#D4A858" stroke-width="1" fill="none" vector-effect="non-scaling-stroke"/>
+    </svg>
+
+    <div class="node narrow">
+      <div class="n">Pergunta 3 · todos</div>
+      <div class="q">Quanto você pensa em colocar na compra da área?</div>
+      <div class="t">Escolha única · 4 faixas</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="node narrow">
+      <div class="n">Pergunta 4 · todos</div>
+      <div class="q">Quando esse dinheiro estará disponível?</div>
+      <div class="t">Escolha única · 5 opções</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="node narrow">
+      <div class="n">Pergunta 5 · todos</div>
+      <div class="q">Quem decide a compra com você?</div>
+      <div class="t">Várias opções · Continuar</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="node contact narrow">
+      <div class="n">Dados de contato · todos</div>
+      <div class="q">Nome, WhatsApp e e-mail</div>
+      <div class="t">Nome e WhatsApp obrigatórios · botão Enviar respostas</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="node end narrow">
+      <div class="n">Fim</div>
+      <div class="q">Obrigado, {nome}. Recebemos suas respostas.</div>
+      <div class="t">E-Book Uruguai · Agendar conversa</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><i style="background:#1B3A2D"></i>Escolha única: avança sozinha</span>
+    <span><i style="background:#D4A858"></i>Múltipla escolha: botão Continuar</span>
+    <span>← Voltar disponível em todas as telas</span>
+  </div>
+
+  <div class="footer"><span>Benedini Fazendas · Hotline Uruguai</span><span>3</span></div>
+</section>
+
+<!-- ======================= 4. PERGUNTAS DETALHADAS ======================= -->
+<section class="page">
+  <div class="eyebrow">03 · Perguntas e respostas</div>
+  <h1 class="page-title">O conteúdo de cada tela</h1>
+  <p class="lead">Texto exato de cada tela, tipo de resposta e coluna correspondente na planilha.</p>
+
+  <div class="qlist">
+    <div class="qcard">
+      <div class="qhead"><span class="qnum">Pergunta 1</span><div class="badges"><span class="badge who">Todos</span><span class="badge single">Escolha única</span></div></div>
+      <div class="qtext">Para começar, qual destas opções descreve melhor você?</div>
+      <div class="opts c3">
+        <div class="opt"><span class="k">a</span>Sou produtor rural</div>
+        <div class="opt"><span class="k">b</span>Sou empresário ou investidor</div>
+        <div class="opt"><span class="k">c</span>Represento uma família ou family office</div>
+      </div>
+      <div class="qhint col">coluna: perfil</div>
+    </div>
+
+    <div class="qcard">
+      <div class="qhead"><span class="qnum">Pergunta 2 · produtor rural</span><div class="badges"><span class="badge who">Só produtor</span><span class="badge single">Escolha única</span></div></div>
+      <div class="qtext">Quando você pretende investir?</div>
+      <div class="opts c4">
+        <div class="opt"><span class="k">a</span>Agora</div>
+        <div class="opt"><span class="k">b</span>Em 6 meses</div>
+        <div class="opt"><span class="k">c</span>Em 12 meses</div>
+        <div class="opt"><span class="k">d</span>Ainda não sei</div>
+      </div>
+      <div class="qhint col">coluna: quando_investir</div>
+    </div>
+
+    <div class="qcard">
+      <div class="qhead"><span class="qnum">Pergunta 2 · empresário e família</span><div class="badges"><span class="badge who">Empresário e família</span><span class="badge multi">Até 2 opções</span></div></div>
+      <div class="qtext">O que mais pesa para você ao considerar terra fora do Brasil?</div>
+      <div class="qhint">Marque até duas e toque em Continuar.</div>
+      <div class="opts">
+        <div class="opt"><span class="k">a</span>Diversificar o patrimônio fora do Brasil</div>
+        <div class="opt"><span class="k">b</span>Ter um ativo real, negociado em dólar</div>
+        <div class="opt"><span class="k">c</span>Planejar a sucessão da família</div>
+        <div class="opt"><span class="k">d</span>Preservar patrimônio no longo prazo</div>
+      </div>
+      <div class="variant"><b>Variação para família ou family office:</b> "O que mais pesa <b>para a família</b> ao considerar terra fora do Brasil?" · mesmas opções</div>
+      <div class="qhint col">coluna: o_que_pesa</div>
+    </div>
+
+    <div class="qcard">
+      <div class="qhead"><span class="qnum">Pergunta 3</span><div class="badges"><span class="badge who">Todos</span><span class="badge single">Escolha única</span></div></div>
+      <div class="qtext">Quanto você pensa em colocar na compra da área?</div>
+      <div class="qhint">Faixa aproximada e confidencial.</div>
+      <div class="opts c4">
+        <div class="opt"><span class="k">a</span>Até R$ 3 milhões</div>
+        <div class="opt"><span class="k">b</span>De R$ 3 a 8 milhões</div>
+        <div class="opt"><span class="k">c</span>De R$ 8 a 15 milhões</div>
+        <div class="opt"><span class="k">d</span>Acima de R$ 15 milhões</div>
+      </div>
+      <div class="qhint col">coluna: faixa_valor</div>
+    </div>
+
+    <div class="qcard">
+      <div class="qhead"><span class="qnum">Pergunta 4</span><div class="badges"><span class="badge who">Todos</span><span class="badge single">Escolha única</span></div></div>
+      <div class="qtext">Quando esse dinheiro estará disponível?</div>
+      <div class="opts c5">
+        <div class="opt"><span class="k">a</span>Imediatamente</div>
+        <div class="opt"><span class="k">b</span>Em até 3 meses</div>
+        <div class="opt"><span class="k">c</span>Em até 6 meses</div>
+        <div class="opt"><span class="k">d</span>Em até 12 meses</div>
+        <div class="opt"><span class="k">e</span>Em mais de 12 meses</div>
+      </div>
+      <div class="qhint col">coluna: disponibilidade</div>
+    </div>
+
+    <div class="qcard">
+      <div class="qhead"><span class="qnum">Pergunta 5</span><div class="badges"><span class="badge who">Todos</span><span class="badge multi">Várias opções</span></div></div>
+      <div class="qtext">Quem decide a compra com você?</div>
+      <div class="qhint">Pode marcar mais de uma. Depois, toque em Continuar.</div>
+      <div class="opts c4">
+        <div class="opt"><span class="k">a</span>Decido sozinho</div>
+        <div class="opt"><span class="k">b</span>Com os filhos ou a família</div>
+        <div class="opt"><span class="k">c</span>Com sócios</div>
+        <div class="opt"><span class="k">d</span>Com contador ou advogado</div>
+      </div>
+      <div class="qhint col">coluna: quem_decide</div>
+    </div>
+  </div>
+
+  <div class="footer"><span>Benedini Fazendas · Hotline Uruguai</span><span>4</span></div>
+</section>
+
+<!-- ======================= 5. TELAS / MENSAGENS ======================= -->
+<section class="page">
+  <div class="eyebrow">04 · Mensagens e telas</div>
+  <h1 class="page-title">O que o cliente vê</h1>
+  <p class="lead">Textos de abertura e de agradecimento aprovados, uma pergunta de exemplo e a tela de dados de contato.</p>
+
+  <div class="phones">
+    <div class="phone-wrap">
+      <div class="cap">Abertura</div>
+      <div class="phone">
+        <div class="k">Benedini Fazendas · Uruguai</div>
+        <h3>Agenda Reservada Uruguai</h3>
+        <p>Leva menos de 1 minuto. Suas respostas são confidenciais e usadas só para preparar sua conversa com nossos especialistas.</p>
+        <div class="btn">Começar</div>
+      </div>
+    </div>
+
+    <div class="phone-wrap">
+      <div class="cap">Exemplo de pergunta <span>· Pergunta 1 de 5</span></div>
+      <div class="phone">
+        <div class="back">← Voltar</div>
+        <div class="bar"><i style="width:20%"></i></div>
+        <div class="k">Pergunta 1 de 5</div>
+        <h3 style="font-size:12pt">Para começar, qual destas opções descreve melhor você?</h3>
+        <div style="margin-top:4mm">
+          <div class="choice">Sou produtor rural</div>
+          <div class="choice sel">Sou empresário ou investidor</div>
+          <div class="choice">Represento uma família ou family office</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phone-wrap">
+      <div class="cap">Dados de contato <span class="pill-sug">texto sugerido</span></div>
+      <div class="phone light">
+        <div class="back">← Voltar</div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <div class="k">Último passo</div>
+        <h3 style="font-size:12pt">Para finalizar, como falamos com você?</h3>
+        <div class="field filled"><label>Nome *</label><div>Maria Souza</div></div>
+        <div class="field filled"><label>WhatsApp *</label><div>(16) 99999-0000</div></div>
+        <div class="field"><label>E-mail (opcional)</label><div>seu@email.com</div></div>
+        <div class="btn">Enviar respostas</div>
+      </div>
+    </div>
+
+    <div class="phone-wrap">
+      <div class="cap">Obrigado</div>
+      <div class="phone" style="background:var(--dark)">
+        <div class="k">Respostas enviadas</div>
+        <h3>Obrigado, Maria. Recebemos suas respostas.</h3>
+        <p>Nosso especialista vai lhe atender.</p>
+        <div class="btn">Baixar o E-Book Uruguai</div>
+        <div class="btn ghost later">Agendar conversa · quando o Calendly existir</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer"><span>Benedini Fazendas · Hotline Uruguai</span><span>5</span></div>
+</section>
+
+<!-- ======================= 6. DADOS + PLANILHA + PRÓXIMOS PASSOS ======================= -->
+<section class="page">
+  <div class="eyebrow">05 · Dados coletados</div>
+  <h1 class="page-title">Formulário de dados e planilha</h1>
+  <p class="lead">O que o cliente preenche no último passo e como cada lead aparece para o comercial.</p>
+
+  <h2 class="sec">Dados de contato</h2>
+  <table>
+    <thead><tr><th>Campo</th><th class="c">Obrigatório</th><th>Formato</th><th>Para que serve</th></tr></thead>
+    <tbody>
+      <tr><td><b>Nome</b></td><td class="c ok">Sim</td><td>Texto livre</td><td>Personalizar o agradecimento e o atendimento</td></tr>
+      <tr><td><b>WhatsApp</b></td><td class="c ok">Sim</td><td>DDD + número, validado</td><td>Canal principal de contato do comercial</td></tr>
+      <tr><td><b>E-mail</b></td><td class="c no">Não</td><td>E-mail válido</td><td>Pré-preencher o Calendly e enviar materiais</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="sec">Planilha LEADS (privada)</h2>
+  <p class="lead" style="margin-top:2px">Uma linha por envio. As colunas são criadas sozinhas; se o formulário ganhar perguntas, novas colunas aparecem.</p>
+  <table>
+    <thead><tr><th>Coluna</th><th>Exemplo</th><th>Coluna</th><th>Exemplo</th></tr></thead>
+    <tbody>
+      <tr><td class="col">recebido_em</td><td>03/11/2026 14:32</td><td class="col">nome</td><td>Maria Souza</td></tr>
+      <tr><td class="col">perfil</td><td>Empresário ou investidor</td><td class="col">whatsapp</td><td>(16) 99999-0000</td></tr>
+      <tr><td class="col">quando_investir</td><td><span class="no">vazio para este perfil</span></td><td class="col">email</td><td>maria@empresa.com</td></tr>
+      <tr><td class="col">o_que_pesa</td><td>Diversificar o patrimônio, Ativo em dólar</td><td class="col">propriedade</td><td>chm01</td></tr>
+      <tr><td class="col">faixa_valor</td><td>De R$ 8 a 15 milhões</td><td class="col">botao_origem</td><td>prop-chm01</td></tr>
+      <tr><td class="col">disponibilidade</td><td>Em até 3 meses</td><td class="col">utm_source / medium</td><td>instagram / social</td></tr>
+      <tr><td class="col">quem_decide</td><td>Com sócios, Com contador ou advogado</td><td class="col">utm_campaign / content</td><td>pl / stories-01</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="sec">Próximos passos</h2>
+  <ul class="todo">
+    <li><span>Criar a planilha privada, colar o script e implantar</span><span class="who">Benedini</span></li>
+    <li><span>Cadastrar a URL e a senha da planilha na Vercel</span><span class="who">Benedini</span></li>
+    <li><span>Enviar o link de download do E-Book Uruguai</span><span class="who">Benedini</span></li>
+    <li><span>Montar a agenda e enviar o link do Calendly</span><span class="who">Benedini</span></li>
+    <li><span>Aprovar o texto da tela de dados de contato</span><span class="who">Benedini</span></li>
+    <li><span>Desenvolver /hotline e trocar todos os botões do Typeform</span><span class="who">Desenvolvimento</span></li>
+    <li><span>Testar o fluxo completo gravando na planilha e publicar</span><span class="who">Desenvolvimento</span></li>
+  </ul>
+
+  <div class="footer"><span>Benedini Fazendas · Hotline Uruguai</span><span>6</span></div>
+</section>
+
+</body>
+</html>

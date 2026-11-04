@@ -6,6 +6,10 @@ async function fetchSheet(sheetName: string): Promise<string[][]> {
   // Alternativa: export CSV via gviz
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`
   const res = await fetch(url, { next: { revalidate: 300 } })
+  if (!res.ok) {
+    // Lança erro para o ISR manter a última versão boa em vez de publicar página vazia
+    throw new Error(`Falha ao buscar aba "${sheetName}" da planilha: HTTP ${res.status}`)
+  }
   const text = await res.text()
   return parseCSV(text)
 }
