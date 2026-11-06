@@ -118,6 +118,7 @@ function Nav() {
           <HotlineButton
             label="Fale Conosco"
             utmContent="menu"
+            ocultarNoHotline
             className="bg-benedini-gold text-benedini-dark px-5 py-2 text-sm font-semibold hover:bg-benedini-gold-light transition"
           />
         </div>

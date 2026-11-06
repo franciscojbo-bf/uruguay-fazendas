@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { AGENDA_FIM } from '@/lib/config'
 import HotlineButton from './HotlineButton'
 
@@ -11,12 +12,14 @@ function formatDate(iso: string): string {
 
 export default function AgendaBanner() {
   const [visible, setVisible] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     setVisible(new Date() <= new Date(AGENDA_FIM + 'T23:59:59'))
   }, [])
 
-  if (!visible) return null
+  // No próprio formulário a faixa só distrai: o "AGENDAR" levaria para a mesma página
+  if (!visible || pathname === '/hotline') return null
 
   return (
     <div className="bg-benedini-gold text-benedini-dark text-sm font-medium">
