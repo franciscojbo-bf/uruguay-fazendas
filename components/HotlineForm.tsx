@@ -377,9 +377,11 @@ export default function HotlineForm() {
           <div className="text-white py-8" aria-live="polite">
             <p className="text-benedini-gold text-xs font-semibold tracking-[0.2em] uppercase">Respostas enviadas</p>
             <h2 ref={titulo} tabIndex={-1} className="font-display text-4xl md:text-5xl mt-4 outline-none">
-              Obrigado, {primeiroNome}. Recebemos suas respostas.
+              Obrigado, {primeiroNome}.
             </h2>
-            <p className="mt-6 text-white/75 text-lg">Nosso especialista vai lhe atender.</p>
+            <p className="mt-4 text-white/80 text-xl md:text-2xl leading-relaxed">
+              Clique no botão abaixo e agende uma reunião conosco.
+            </p>
 
             <div className="mt-10 flex flex-col gap-3">
               {EBOOK_URL && (
@@ -407,7 +409,7 @@ export default function HotlineForm() {
                       : 'bg-benedini-gold text-benedini-dark text-center py-4 font-semibold hover:bg-benedini-gold-light transition min-h-[44px]'
                   }
                 >
-                  Agendar conversa
+                  Agende Agora
                 </a>
               )}
               <a href="/fazendas" className="text-white/60 hover:text-white text-sm text-center py-3 transition">
