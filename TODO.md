@@ -14,7 +14,7 @@ Commit no GitHub: `239a87a` (main) · Hotline: formulário próprio no lugar do 
 ## Depois do deploy
 
 - [ ] Enviar o **link de download do E-Book Uruguai**. Entra em `lib/config.ts` (`EBOOK_URL`), com commit e novo deploy.
-- [ ] Montar a agenda e enviar o **link do Calendly**. Entra em `lib/config.ts` (`CALENDLY_URL`), com commit e novo deploy.
+- [x] Montar a agenda e enviar o **link do Calendly**. Feito: `CALENDLY_URL` em `lib/config.ts` (botão "Agendar conversa" na tela de obrigado, para todos os perfis).
 - [ ] Corrigir na planilha das fazendas o slug `sclo4` (letra "o") para `scl04` (zero).
 - [ ] Apagar as linhas de teste na aba **LEADS**.
 

@@ -401,7 +401,11 @@ export default function HotlineForm() {
                   onClick={() => {
                     try { sendGAEvent('event', 'abrir_calendly', { origem: 'hotline' }) } catch {}
                   }}
-                  className="border border-white/40 text-white text-center py-4 font-semibold hover:border-benedini-gold hover:text-benedini-gold transition min-h-[44px]"
+                  className={
+                    EBOOK_URL
+                      ? 'border border-white/40 text-white text-center py-4 font-semibold hover:border-benedini-gold hover:text-benedini-gold transition min-h-[44px]'
+                      : 'bg-benedini-gold text-benedini-dark text-center py-4 font-semibold hover:bg-benedini-gold-light transition min-h-[44px]'
+                  }
                 >
                   Agendar conversa
                 </a>
