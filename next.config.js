@@ -34,7 +34,11 @@ const nextConfig = {
   // As imagens usam <img> direto (não next/image), então o otimizador de
   // imagens não precisa aceitar hosts externos.
   async headers() {
-    return [{ source: '/:path*', headers: securityHeaders }]
+    return [
+      { source: '/:path*', headers: securityHeaders },
+      // E-book: só é oferecido na tela de obrigado do /hotline, não deve aparecer no Google
+      { source: '/e-book-uruguai.pdf', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
+    ]
   },
   async redirects() {
     return [

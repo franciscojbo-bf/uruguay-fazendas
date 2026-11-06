@@ -384,32 +384,29 @@ export default function HotlineForm() {
             </p>
 
             <div className="mt-10 flex flex-col gap-3">
-              {EBOOK_URL && (
-                <a
-                  href={EBOOK_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => {
-                    try { sendGAEvent('event', 'download_ebook', { origem: 'hotline' }) } catch {}
-                  }}
-                  className="bg-benedini-gold text-benedini-dark text-center py-4 font-semibold hover:bg-benedini-gold-light transition min-h-[44px]"
-                >
-                  Baixar o E-Book Uruguai
-                </a>
-              )}
               {calendlyHref && (
                 <a
                   href={calendlyHref}
                   onClick={() => {
                     try { sendGAEvent('event', 'abrir_calendly', { origem: 'hotline' }) } catch {}
                   }}
-                  className={
-                    EBOOK_URL
-                      ? 'border border-white/40 text-white text-center py-4 font-semibold hover:border-benedini-gold hover:text-benedini-gold transition min-h-[44px]'
-                      : 'bg-benedini-gold text-benedini-dark text-center py-4 font-semibold hover:bg-benedini-gold-light transition min-h-[44px]'
-                  }
+                  className="bg-benedini-gold text-benedini-dark text-center py-4 font-semibold hover:bg-benedini-gold-light transition min-h-[44px]"
                 >
                   Agende Agora
+                </a>
+              )}
+              {EBOOK_URL && (
+                <a
+                  href={EBOOK_URL}
+                  download="E-Book Uruguai - Benedini Fazendas.pdf"
+                  target="_blank"
+                  rel="noopener"
+                  onClick={() => {
+                    try { sendGAEvent('event', 'download_ebook', { origem: 'hotline' }) } catch {}
+                  }}
+                  className="border border-white/40 text-white text-center py-4 font-semibold hover:border-benedini-gold hover:text-benedini-gold transition min-h-[44px]"
+                >
+                  Clique aqui e baixe o E-Book
                 </a>
               )}
               <a href="/fazendas" className="text-white/60 hover:text-white text-sm text-center py-3 transition">
