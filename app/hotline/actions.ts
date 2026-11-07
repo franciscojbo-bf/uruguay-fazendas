@@ -1,6 +1,8 @@
 'use server'
 
+import { after } from 'next/server'
 import { z } from 'zod'
+import { notificarLead } from '@/lib/notificar-lead'
 import {
   PERFIS,
   PERFIL_PRODUTOR,
@@ -87,6 +89,7 @@ export async function enviarHotline(input: HotlineInput): Promise<HotlineResult>
     if (process.env.NODE_ENV !== 'production') {
       // Modo de teste local: sem planilha configurada, só registra no terminal
       console.info('[hotline] HOTLINE_SCRIPT_URL não configurada; lead NÃO gravado:', linha)
+      after(() => notificarLead(linha))
       return { ok: true }
     }
     console.error('[hotline] HOTLINE_SCRIPT_URL ou HOTLINE_TOKEN ausentes')
@@ -107,6 +110,8 @@ export async function enviarHotline(input: HotlineInput): Promise<HotlineResult>
       console.error('[hotline] Planilha recusou o envio', res.status, body?.error)
       return { ok: false, error: ERRO_GENERICO }
     }
+    // Aviso por e-mail depois da resposta: o usuário não espera pelo Resend
+    after(() => notificarLead(linha))
     return { ok: true }
   } catch (err) {
     console.error('[hotline] Falha ao gravar na planilha', err)
